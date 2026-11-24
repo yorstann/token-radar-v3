@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar — a fitted launch-pricing model</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">◉</div>
+    <div>
+      <h1>Token Launch Radar</h1>
+      <p class="tagline">Every pre-token protocol in the snapshot, priced by a model <em>fitted</em> on the ones that already trade — not by hand-set weights.</p>
+    </div>
+  </div>
+  <div class="run-meta">
+    <div><span class="k">Model</span><span class="v" id="m-version">—</span></div>
+    <div><span class="k">Snapshot</span><span class="v" id="m-asof">—</span></div>
+    <div><span class="k">Source</span><span class="v small" id="m-source">—</span></div>
+  </div>
+</header>
+
+<section class="kpis" id="kpis"></section>
+
+<section class="panel" id="method">
+  <h2>Methodology &amp; fit diagnostics</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>The model</h3>
+      <p id="model-story"></p>
+      <h3>Coefficients</h3>
+      <table class="mini" id="coef-table"></table>
+      <h3>Category multiples (fitted, shrunk)</h3>
+      <table class="mini" id="cat-table"></table>
+      <p class="note" id="cat-note"></p>
+    </div>
+    <div class="col">
+      <h3>Term selection — kept only if both held-out tests improve</h3>
+      <table class="mini" id="term-table"></table>
+      <h3>Validation</h3>
+      <table class="mini" id="val-table"></table>
+      <h3>Predicted vs actual — the ten largest priced protocols</h3>
+      <table class="mini" id="pva-table"></table>
+      <p class="note" id="interval-note"></p>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="board-panel">
+  <h2>The board <span class="sub" id="board-sub"></span></h2>
+  <div class="controls">
+    <input type="search" id="q" placeholder="Search name or slug…">
+    <select id="f-cat"><option value="">All categories</option></select>
+    <select id="f-chain"><option value="">All chains</option></select>
+    <label class="chk"><input type="checkbox" id="f-watch"> Watchlist only</label>
+    <label class="chk"><input type="checkbox" id="f-noshadow"> Hide shadow-priced</label>
+    <select id="f-sort">
+      <option value="rank">Sort: model rank</option>
+      <option value="implied">Sort: implied value</option>
+      <option value="tvl">Sort: TVL</option>
+      <option value="change">Sort: 7d change</option>
+      <option value="age">Sort: age</option>
+      <option value="signal">Sort: signal</option>
+    </select>
+  </div>
+  <div class="table-wrap">
+    <table class="board">
+      <thead><tr>
+        <th>#</th><th>Protocol</th><th>Category</th><th>Chains</th><th class="num">TVL</th>
+        <th class="num">7d</th><th class="num">Implied value</th><th>Band (P10–P90)</th><th>Signal</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <button id="more" class="more">Show more rows</button>
+  <div class="detail" id="detail" hidden></div>
+</section>
+
+<section class="panel" id="live-panel">
+  <h2>Already trading <span class="sub">the market's own values — the fit's training pool, shown for scale</span></h2>
+  <div class="table-wrap">
+    <table class="board live">
+      <thead><tr><th>Protocol</th><th>Category</th><th class="num">Market cap</th><th class="num">TVL</th><th class="num">7d</th></tr></thead>
+      <tbody id="live-rows"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>Implied value is this entry's own fitted estimate, never a promise: the model's held-out median error is printed above, and every row carries the band that error implies. A protocol "records no token" in the snapshot — that is DefiLlama's record, not proof none exists. Shadow-priced rows are products of tokens that already trade (wrapped, staked, bridged, exchange and versioned entries), discounted to 0.35× after the fit and flagged wherever they appear. Not financial advice.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
